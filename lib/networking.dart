@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:io' show sleep;
+import 'coin_data.dart';
 
 class NetworkHelper {
   final String _baseURL =
@@ -28,5 +29,19 @@ class NetworkHelper {
     } else {
       return jsonDecode(response.body)['last'];
     }
+  }
+
+  Future<List<double>> getAllCoinPrices(
+    String fiatTicker,
+  ) async {
+    List<double> prices = [0.0, 0.0, 0.0];
+    int i = 0;
+    for (String cryptoTicker in cryptoList) {
+      var x = await getTickerPrice(fiatTicker, cryptoTicker);
+      //print(x);
+      prices[i] = x;
+      i++;
+    }
+    return prices;
   }
 }
